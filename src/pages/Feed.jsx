@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import ClipLoader from "react-spinners/ClipLoader";
+import BarLoader from "react-spinners/BarLoader";
 
 function Feed() {
 
@@ -91,7 +91,7 @@ function Feed() {
 
   return (
     <div className='flex flex-col gap-2 mb-8'>
-      {isLoading? <ClipLoader /> : FeedsElement}
+      {isLoading? <BarLoader /> : FeedsElement}
       <hr />
     </div>
   );
