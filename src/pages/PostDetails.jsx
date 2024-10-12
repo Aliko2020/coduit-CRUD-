@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from 'react-router-dom'
+
 
 const PostDetails = () => {
+  const Params = useParams()
+  const [feed, setFeed] = useState(null)
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/feeds/${Params.id}`).then(res => res.json()).then(data => setFeed(data))
+  }, [])
+
+  console.log(feed);
+  
   return (
     <div className="flex flex-col gap-4 p-4 sm:px-32 ">
       <div className="flex flex-col gap-4">

@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path='/feed/:id' element={<PostDetails />} />
+          <Route path='/feeds/:id' element={<PostDetails />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
         </Route>
