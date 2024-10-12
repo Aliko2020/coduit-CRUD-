@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const cors = require("cors")
+const cors = require("cors");
+const feeds = require('./Model/feeds');
 require("dotenv").config()
-const Feed = require('./Model/FeedsModel')
+
+
 
 const app = express()
 app.use(express.json())
@@ -12,15 +14,16 @@ const Port = process.env.PORT || 3001
 const url = process.env.DBURL
 
 app.get('/feeds',(req,res)=>{
-    Feed.find({}).then((van)=>{
-        res.json(van)
+    feeds.find({}).then((feed)=>{
+        res.json(feed)
     }).catch((err)=> console.log(err))
 })
+
 //get feed by id
 app.get("/feeds/:id", (req, res) => {
     const feedId = req.params.id;
 
-    Feed.findById(feedId)
+    feeds.findById(feedId)
         .then((feed) => {
             if (!feed) {
                 // Handles case where van with the given ID is not found
@@ -35,15 +38,21 @@ app.get("/feeds/:id", (req, res) => {
         });
 });
 
-// add a feed
-app.post('/feeds/addfeed',async (req,res)=>{
+
+
+app.post('/feeds/addfeed', async (req, res) => {
     try {
-        const feed = await Feed.create(req.body)
-        
-    } catch (error) {
-        res.status(500).json(error)
-    }
-})
+        const newFeed = new feeds(req.body); 
+        await newFeed.save(); 
+    
+        res.status(201).json({ message: 'Feed created successfully!' }); 
+      } catch (error) {
+        console.error('Error creating feed entry:', error);
+        res.status(500).json({ message: 'Error adding feed entry' }); 
+      }
+});
+
+
 
 app.listen(Port,()=>{
     mongoose.connect(url)

@@ -1,17 +1,16 @@
 import React from "react";
 import Feed from "./Feed";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div className="flex flex-col p-4 sm:px-32">
       <div>
-        <h1>Popular topics</h1>
+        <h1 className="font-semibold">Popular topics</h1>
         <div>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Id nisi
-            possimus exercitationem? Inventore animi iste voluptatum quisquam,
-            id nostrum quo ipsam! Asperiores optio, repellat quod repellendus
-            suscipit iure voluptatum omnis?
+            possimus exercitationem? Inventore animi iste voluptatum quisquam.
           </p>
         </div>
       </div>
@@ -25,19 +24,20 @@ const Home = () => {
         </div>
         <div className="py-8">
           <Feed />
-          <Feed />
-          <Feed />
-          <Feed />
         </div>
       </div>
-      {/* <div className="fixed bottom-10 right-5 flex justify-end">
-        <img
-          width="48"
-          height="48"
-          src="https://img.icons8.com/color/48/plus--v1.png"
-          alt="plus--v1"
-        />
-      </div> */}
+      <Link to='/createPost'>
+        <div className="bg-[#5cb95d] text-white py-1 px-2 rounded-md flex gap-1 justify-end items-center fixed bottom-10 right-5 ">
+
+          <img
+            width="20"
+            height="20"
+            src="https://img.icons8.com/color/48/plus--v1.png"
+            alt="plus--v1"
+          />
+          Create
+        </div>
+      </Link>
     </div>
   );
 };
