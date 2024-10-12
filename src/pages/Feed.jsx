@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 function Feed() {
+
+  
+  const [feeds, setFeeds] = useState([])
   const [likes, setLikes] = useState(62);
   const [showComment, setShowComment] = useState(false);
   const [isLiked, setLiked] = useState(false);
   const { feedId } = useParams(); 
+
+
+  //Fetching vans from backend
+  useEffect(()=>{
+    fetch('"http://localhost:8080/feeds/"')
+    .then(res => res.json())
+    .then(data =>  setFeeds(data))
+  },[])
+console.log(feeds);
 
   const handleLikeClick = () => {
     if(!isLiked){

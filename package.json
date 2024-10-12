@@ -1,5 +1,5 @@
 {
-  "name": "conduit",
+  "name": "backend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "formik": "^2.4.6",
+    "mongodb": "6.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
@@ -30,5 +32,9 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "vite": "^5.4.8"
-  }
+  },
+  "description": "This app is created with React vite, to run please download files, open a text edit and run npm install to install dependencies. run npm run dev to preview.",
+  "main": "eslint.config.js",
+  "author": "",
+  "license": "ISC"
 }

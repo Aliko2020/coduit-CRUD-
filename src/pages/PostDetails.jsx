@@ -9,7 +9,7 @@ const PostDetails = () => {
           <div className="flex">
             <div className="flex items-center gap-2">
               <img
-                width="48"
+                width=""
                 height="48"
                 src="https://img.icons8.com/color/48/circled-user-male-skin-type-6--v1.png"
                 alt="circled-user-male-skin-type-6--v1"
@@ -24,14 +24,14 @@ const PostDetails = () => {
             <div className="flex gap-8 items-end">
               <span className="flex gap-2">
                 <img
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   src="https://img.icons8.com/color/48/like--v1.png"
                   alt="like--v1"
                 />
                 favourite
               </span>
-              <span className="hidden sm:block px-4 border border-[#5cb95d]">
+              <span className="hidden sm:block px-4 border border-[#5cb95d] cursor-pointer">
                 Follow Aliko Amos
               </span>
             </div>
