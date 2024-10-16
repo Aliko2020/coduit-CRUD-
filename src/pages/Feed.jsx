@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { Link, useParams } from "react-router-dom";
 import BarLoader from "react-spinners/BarLoader";
+import { useSelector } from "react-redux";
 
 const initialState = {
   feeds: [],
@@ -30,6 +31,10 @@ const reducer = (state, action) => {
 };
 
 function Feed() {
+  
+
+  console.log(useSelector((state)=> console.log(state)));
+  
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -51,7 +56,7 @@ function Feed() {
   const handleCommentClick = () => {
     dispatch({ type: "TOGGLE_COMMENT" });
   };
-console.log(state.feeds);
+
 
   const FeedsElement = state.feeds.map((feed) => {
     const isoString = feed.date;
