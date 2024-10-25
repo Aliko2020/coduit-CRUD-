@@ -7,7 +7,7 @@ const PostDetails = () => {
   const [feed, setFeed] = useState(null)
 
   useEffect(() => {
-    fetch(`http://localhost:8080/feeds/${Params.id}`).then(res => res.json()).then(data => setFeed(data))
+    fetch(`https://coduit-backend.onrender.com/feeds/${Params.id}`).then(res => res.json()).then(data => setFeed(data))
   }, [])
 
   console.log(feed);

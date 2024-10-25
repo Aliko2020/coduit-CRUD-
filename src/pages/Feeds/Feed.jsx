@@ -62,7 +62,7 @@ function Feed() {
 
   const fetchFeeds = () => {
     dispatch({ type: "SET_LOADING", payload: true });
-    fetch("http://localhost:8080/feeds")
+    fetch("https://coduit-backend.onrender.com/feeds")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched data:", data);
@@ -95,7 +95,7 @@ function Feed() {
       return; // Prevent empty replies
     }
 
-    fetch(`http://localhost:8080/feeds/${id}/reply`, {
+    fetch(`https://coduit-backend.onrender.com/feeds/${id}/reply`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ author: reply.author, comment: reply.comment }),
