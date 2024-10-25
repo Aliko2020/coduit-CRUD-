@@ -1,16 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const feedSchema = new mongoose.Schema({
-  title: String, 
   author: String,
+  title: String,
   body: String,
-  comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
-  votes: {
-      type: Number,
-      default: 0
-    }  
- 
+  votes: Number,
+  showComment: { type: Boolean, default: false },
+  replies: [{ 
+    author: String, 
+    comment: String, 
+    date: { type: Date, default: Date.now } 
+  }]
 });
 
-module.exports = mongoose.model('feeds', feedSchema);
+module.exports = mongoose.model("Feed", feedSchema);

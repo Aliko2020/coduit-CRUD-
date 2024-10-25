@@ -1,5 +1,5 @@
 import React from "react";
-import Feed from "./Feed";
+import Feed from "./Feeds/Feed";
 import { Link } from "react-router-dom";
 
 const Home = () => {

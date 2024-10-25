@@ -2,59 +2,77 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require("cors");
 const feeds = require('./Model/feeds');
-require("dotenv").config()
+require("dotenv").config();
 
+const app = express();
+app.use(express.json());
+app.use(cors());
 
+const Port = process.env.PORT || 3001;
+const url = process.env.DBURL;
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+app.get('/feeds', (req, res) => {
+  feeds.find({})
+    .then((feed) => {
+      res.json(feed);
+    })
+    .catch((err) => console.log(err));
+});
 
-const Port = process.env.PORT || 3001
-const url = process.env.DBURL
-
-app.get('/feeds',(req,res)=>{
-    feeds.find({}).then((feed)=>{
-        res.json(feed)
-    }).catch((err)=> console.log(err))
-})
-
-//get feed by id
+// Get feed by id
 app.get("/feeds/:id", (req, res) => {
-    const feedId = req.params.id;
-
-    feeds.findById(feedId)
-        .then((feed) => {
-            if (!feed) {
-                // Handles case where van with the given ID is not found
-                res.status(404).json({ message: "feed not found" });
-            } else {
-                res.json(feed); 
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({ message: "Error fetching feed details" });
-        });
-});
-
-
-
-app.post('/feeds/addfeed', async (req, res) => {
-    try {
-        const newFeed = new feeds(req.body); 
-        await newFeed.save(); 
-    
-        res.status(201).json({ message: 'Feed created successfully!' }); 
-      } catch (error) {
-        console.error('Error creating feed entry:', error);
-        res.status(500).json({ message: 'Error adding feed entry' }); 
+  const feedId = req.params.id;
+  feeds.findById(feedId)
+    .then((feed) => {
+      if (!feed) {
+        // Handles case where feed with the given ID is not found
+        res.status(404).json({ message: "Feed not found" });
+      } else {
+        res.json(feed);
       }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ message: "Error fetching feed details" });
+    });
 });
 
+// Add new feed
+app.post('/feeds/addfeed', async (req, res) => {
+  try {
+    const newFeed = new feeds(req.body);
+    await newFeed.save();
+    res.status(201).json({ message: 'Feed created successfully!' });
+  } catch (error) {
+    console.error('Error creating feed entry:', error);
+    res.status(500).json({ message: 'Error adding feed entry' });
+  }
+});
 
+// Add a reply to a feed
+app.post("/feeds/:id/reply", (req, res) => {
+  const feedId = req.params.id;
+  const { author, comment } = req.body;
+  
+  feeds.findByIdAndUpdate(
+    feedId, 
+    { $push: { replies: { author, comment } } },
+    { new: true }
+  )
+    .then((feed) => {
+      if (!feed) {
+        res.status(404).json({ message: "Feed not found" });
+      } else {
+        res.json(feed);
+      }
+    })
+    .catch((err) => {
+      console.error('Error adding reply:', err);
+      res.status(500).json({ message: 'Error adding reply' });
+    });
+});
 
-app.listen(Port,()=>{
-    mongoose.connect(url)
-    console.log(`Sever running on port: ${Port}`);
-})
+app.listen(Port, () => {
+  mongoose.connect(url);
+  console.log(`Server running on port: ${Port}`);
+});
