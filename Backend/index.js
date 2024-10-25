@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const cors = require("cors");
+const cors = require('cors');
 const feeds = require('./Model/feeds');
-require("dotenv").config();
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
@@ -10,6 +10,21 @@ app.use(cors());
 
 const Port = process.env.PORT || 3001;
 const url = process.env.DBURL;
+
+console.log(url);  // Print the URL to make sure it's correct
+
+// Connect to MongoDB
+
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(Port, () => {
+      console.log(`Server running on port: ${Port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
 
 app.get('/feeds', (req, res) => {
   feeds.find({})
@@ -20,20 +35,19 @@ app.get('/feeds', (req, res) => {
 });
 
 // Get feed by id
-app.get("/feeds/:id", (req, res) => {
+app.get('/feeds/:id', (req, res) => {
   const feedId = req.params.id;
   feeds.findById(feedId)
     .then((feed) => {
       if (!feed) {
-        // Handles case where feed with the given ID is not found
-        res.status(404).json({ message: "Feed not found" });
+        res.status(404).json({ message: 'Feed not found' });
       } else {
         res.json(feed);
       }
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).json({ message: "Error fetching feed details" });
+      res.status(500).json({ message: 'Error fetching feed details' });
     });
 });
 
@@ -50,18 +64,18 @@ app.post('/feeds/addfeed', async (req, res) => {
 });
 
 // Add a reply to a feed
-app.post("/feeds/:id/reply", (req, res) => {
+app.post('/feeds/:id/reply', (req, res) => {
   const feedId = req.params.id;
   const { author, comment } = req.body;
-  
+
   feeds.findByIdAndUpdate(
-    feedId, 
+    feedId,
     { $push: { replies: { author, comment } } },
     { new: true }
   )
     .then((feed) => {
       if (!feed) {
-        res.status(404).json({ message: "Feed not found" });
+        res.status(404).json({ message: 'Feed not found' });
       } else {
         res.json(feed);
       }
@@ -70,9 +84,4 @@ app.post("/feeds/:id/reply", (req, res) => {
       console.error('Error adding reply:', err);
       res.status(500).json({ message: 'Error adding reply' });
     });
-});
-
-app.listen(Port, () => {
-  mongoose.connect(url);
-  console.log(`Server running on port: ${Port}`);
 });
