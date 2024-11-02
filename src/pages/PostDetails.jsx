@@ -42,7 +42,7 @@ const PostDetails = () => {
                 />
                 favourite
               </span>
-              <span className="hidden sm:block px-4 border border-[#5cb95d] cursor-pointer">
+              <span className="hidden sm:block px-4 border border-Primary cursor-pointer">
                 Follow Aliko Amos
               </span>
             </div>

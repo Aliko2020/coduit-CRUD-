@@ -16,9 +16,9 @@ const Home = () => {
       </div>
       <div className="mt-4">
         <div>
-          <h3 className="text-[#5cb95d]">Global Feeds</h3>
+          <h3 className="text-Primary">Global Feeds</h3>
           <div className="flex items-center">
-            <div className="w-24 h-1 bg-[#5cb95d]"></div>
+            <div className="w-24 h-1 bg-Primary"></div>
             <hr />
           </div>
         </div>
@@ -27,7 +27,7 @@ const Home = () => {
         </div>
       </div>
       <Link to='/createPost'>
-        <div className="bg-[#5cb95d] text-white py-1 px-2 rounded-md flex gap-1 justify-end items-center fixed bottom-10 right-5 ">
+        <div className="bg-Primary text-white py-1 px-2 rounded-md flex gap-1 justify-end items-center fixed bottom-10 right-5 ">
 
           <img
             width="20"

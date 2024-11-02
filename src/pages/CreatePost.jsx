@@ -40,7 +40,7 @@ const CreatePost = () => {
       dispatch({ type: 'SET_LOADING', payload: true });
 
       try {
-        const response = await fetch("https://coduit-backend.onrender.com/feeds/addfeed", {
+        const response = await fetch("http://localhost:8080/feeds/addfeed", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const CreatePost = () => {
       ) : (
         <div className="flex flex-col gap-2 p-8 max-w-xl m-auto">
           <h1 className="text-2xl">Create Post</h1>
-          <form className="flex flex-col gap-2" onSubmit={formik.handleSubmit}> {/* Use formik.handleSubmit */}
+          <form className="flex flex-col gap-2" onSubmit={formik.handleSubmit}> 
             <div className="">
               <input
                 name="title"
@@ -111,7 +111,7 @@ const CreatePost = () => {
           <button
             type="submit"
             disabled={state.isLoading}
-            className="px-2 py-1 text-gray-400 bg-gray-200 rounded-md cursor-pointer hover:bg-slate-400 hover:text-gray-100"
+            className="px-2 py-1 text-white bg-Primary rounded-md cursor-pointer hover:bg-slate-400 hover:text-gray-100"
           >
             {state.isLoading ? "Submitting..." : "Post"}
           </button>

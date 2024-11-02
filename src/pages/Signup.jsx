@@ -27,7 +27,7 @@ const Signup = () => {
     >
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-2xl text-gray-400 font-semibold">Sign up</h1>
-        <Link to="/signin" className="text-[#5cb95d] cursor-pointer">
+        <Link to="/signin" className="text-Primary cursor-pointer">
           Have an account?
         </Link>
       </div>
@@ -82,7 +82,7 @@ const Signup = () => {
         </div>
       </div>
       <button
-        className="px-4 py-3 rounded-sm bg-[#5cb95d] text-white font-semibold"
+        className="px-4 py-3 rounded-sm bg-Primary text-white font-semibold"
         type="submit"
       >
         Sign up

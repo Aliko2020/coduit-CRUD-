@@ -8,7 +8,7 @@ const initialState = {
   likes: 62,
   isLiked: false,
   isLoading: false,
-  showReplyInput: null, // New state for showing reply input
+  showReplyInput: null,
 };
 
 const reducer = (state, action) => {
@@ -46,8 +46,6 @@ function Feed() {
 
   useEffect(() => {
     fetchFeeds();
-
-    // Add event listener for clicks outside of the input field
     const handleClickOutside = (event) => {
       if (inputRef.current && !inputRef.current.contains(event.target)) {
         dispatch({ type: "SHOW_REPLY_INPUT", payload: null });
@@ -60,15 +58,18 @@ function Feed() {
     };
   }, []);
 
-  const fetchFeeds = () => {
+  const fetchFeeds = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
-    fetch("https://coduit-backend.onrender.com/feeds")
+    await fetch("http://localhost:8080/feeds/")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched data:", data);
+        const sortedData = data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        ); 
         dispatch({
           type: "SET_FEEDS",
-          payload: data.map((feed) => ({ ...feed, showComment: true })), // Replies visible
+          payload: sortedData.map((feed) => ({ ...feed, showComment: true })), 
         });
       })
       .catch((error) => {
@@ -95,7 +96,7 @@ function Feed() {
       return; // Prevent empty replies
     }
 
-    fetch(`https://coduit-backend.onrender.com/feeds/${id}/reply`, {
+    fetch(`http://localhost:8080/feeds/${id}/reply`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ author: reply.author, comment: reply.comment }),
@@ -151,7 +152,7 @@ function Feed() {
               <h3 className="font-semibold text-lg">{feed.title}</h3>
               <p>{feed.body}</p>
             </div>
-            <div className="flex justify-between items-center text-[#5cb95d] font-semibold mt-2">
+            <div className="flex justify-between items-center text-Primary font-semibold mt-2">
               <Link className="font-semibold" to={`/feeds/${feed._id}`}>
                 Read more
               </Link>
@@ -169,7 +170,8 @@ function Feed() {
               feed.replies.map((reply, index) => (
                 <div key={index} className="bg-gray-100 p-2 rounded-md mt-2">
                   <p className="text-sm">
-                    <span className="font-semibold">{reply.author}</span>: {reply.comment}
+                    <span className="font-semibold">{reply.author}</span>:{" "}
+                    {reply.comment}
                   </p>
                   <p className="text-sm text-gray-500">
                     {new Date(reply.date).toLocaleDateString("en-US")}
@@ -198,7 +200,7 @@ function Feed() {
                 />
                 <button
                   onClick={() => handleReplySubmit(feed._id)}
-                  className="bg-[#5cb95d] rounded-md px-4 py-0 mt-4 text-white"
+                  className="bg-Primary rounded-md px-4 py-0 mt-4 text-white"
                 >
                   Reply
                 </button>
