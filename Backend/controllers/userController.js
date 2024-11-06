@@ -1,81 +1,52 @@
-const Feeds = require("../Model/feeds");
+//importing user model
+const User = require('../Model/userModel');
 
-//get all feeds
-const getFeeds = async (req, res) => {
-  try {
-    const feed = await Feeds.find({});
-    if (feed) {
-      res.status(200).json(feed);
+
+// creates a  new user
+const createUser = async (req, res) => {
+
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+  
+    if (user) {
+      res.status(409).json({ message: "User already exists, please login" });
     } else {
-      res.status(401).json({ message: "something happened!" });
+      try {
+        const newUser = await User.create({
+          email: email,
+          password: password, //password will be hashed in the schema
+        });
+  
+        // Send a success response
+        res.status(201).json({ message: "User created successfully", user: newUser });
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
     }
-  } catch (error) {
-    res.status(401).json({ message: "an error occured, try again" });
-  }
-};
+}
+  
 
-//get feed by id
-const getfeedById = async (req, res) => {
-  try {
-    const feedId = req.params.id;
-    const feed = await Feeds.findById(feedId);
-    if (feed) {
-      res.status(200).json(feed);
-    } else {
-      res.status(404).json({ message: "Feed not found" });
-    }
-  } catch (error) {
-    res.status(401).json({ message: "an error occured, try again" });
-  }
-};
-
-//post a feed
-const postFeed = async (req, res) => {
-    const newFeed = new Feeds(req.body);
-    console.log(newFeed);
-    
+  //login users
+  const login = async (req, res) => {
+    const { email, password } = req.body;
+  
     try {
-      const savedFeed = await newFeed.save();
-      if (savedFeed) {
-        res.status(201).json({ message: "Feed created successfully!" });
+      const user = await User.findOne({ email });
+  
+      if (user && await user.matchPassword(password)) {
+        res.status(200).json({ message: "You are logged in" });
       } else {
-        res.status(500).json({ message: "Error posting feed" });
+        res.status(401).json({ message: "Invalid email or password!" });
       }
     } catch (error) {
-      console.error("Error adding feed entry:", error); 
-      res.status(500).json({ message: "Error adding feed entry" });
+      console.error(error);
+      res.status(500).json({ message: "Server error, please try again later." });
     }
-  };
+  }
   
 
-//comment on feed
-const feedReply = async (req, res) => {
-    const feedId = req.params.id;
-    const { author, comment } = req.body;
-  
-    try {
-      const feed = await Feeds.findByIdAndUpdate(feedId,
-        { $push: { replies: { author, comment } } },
-        { new: true }
-      );
-  
-      if (!feed) {
-        return res.status(404).json({ message: "Feed not found" });
-      }
-  
-      res.json(feed);
-    } catch (err) {
-      console.error("Error adding reply:", err);
-      res.status(500).json({ message: "Error adding reply" });
-    }
-  };
-  
-
- 
 
 module.exports = {
-  getFeeds,
-  getfeedById,
-  postFeed,
-  feedReply
-};
+    createUser,
+    login
+}
