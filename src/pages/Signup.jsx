@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-import * as yup from 'yup'
+import * as yup from "yup";
+import axios from "axios";
+import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 
 const Signup = () => {
   const formik = useFormik({
@@ -10,14 +12,22 @@ const Signup = () => {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      console.log("onSubmit", values);
-    },
     validationSchema: yup.object({
-      username: yup.string().required('username is required').min(3),
-      email: yup.string().required('email is required').email('invalid email format'),
-      password: yup.string().required('password is required').min(8)
-    })
+      username: yup.string().required("Username is required").min(3),
+      email: yup.string().required("Email is required").email("Invalid email format"),
+      password: yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    }),
+    onSubmit: async (values) => {
+      const { username, email, password } = values;
+      try {
+       const response = await axios.post('http://localhost:8080/createuser', { username, email, password });
+       console.log(response.data);
+       
+        window.location.href = '/signin';
+      } catch (error) {
+        console.error("Error signing up:", error);
+      }
+    },
   });
 
   return (
@@ -32,7 +42,7 @@ const Signup = () => {
         </Link>
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col relative">
           <input
             name="username"
             value={formik.values.username}
@@ -42,13 +52,14 @@ const Signup = () => {
             type="text"
             placeholder="Username"
           />
+          <FaUser className="absolute right-2 top-2.5 text-gray-400" />
           <div className="text-sm text-red-500">
             {formik.errors.username &&
               formik.touched.username &&
               formik.errors.username}
           </div>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col relative">
           <input
             name="email"
             value={formik.values.email}
@@ -58,23 +69,25 @@ const Signup = () => {
             type="text"
             placeholder="Email"
           />
+          <FaEnvelope className="absolute right-2 top-2.5 text-gray-400" />
           <div className="text-sm text-red-500">
             {formik.errors.email &&
               formik.touched.email &&
               formik.errors.email}
           </div>
         </div>
-        <div className="flex flex-col gap-1">
-        <input
-          name="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="appearance-none focus:outline-none w-60 h-10 border px-2 rounded border-gray-300"
-          type="text"
-          placeholder="Password"
-        />
-        <div className="text-sm text-red-500">
+        <div className="flex flex-col relative">
+          <input
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="appearance-none focus:outline-none w-60 h-10 border px-2 rounded border-gray-300"
+            type="password"
+            placeholder="Password"
+          />
+          <FaLock className="absolute right-2 top-2.5 text-gray-400" />
+          <div className="text-sm text-red-500">
             {formik.errors.password &&
               formik.touched.password &&
               formik.errors.password}

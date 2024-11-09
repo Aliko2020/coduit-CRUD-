@@ -6,6 +6,8 @@ import Signup from './pages/Signup';
 import Layout from './components/Layout';
 import PostDetails from './pages/PostDetails';
 import CreatePost from './pages/CreatePost';
+import Profile from './pages/Profile';
+
 
 
 
@@ -16,11 +18,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Signin />} />
           <Route path='/feeds/:id' element={<PostDetails />} />
           <Route path='/createPost' element={<CreatePost />} />
-          <Route path="/signin" element={<Signin />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>
